@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @see https://github.com/artlevitan/solos-examples
+ * 
  * Скрипт для импорта контактов из VCF-файла (VERSION:3.0) в CRM.
  * 
  * Этот скрипт считывает контакты из VCF-файла и добавляет их в CRM-систему solOS с использованием API.
@@ -10,7 +12,6 @@
  * 
  * @see https://www.solos.pro/
  * @see https://www.solos.pro/api/v1/
- * @see https://github.com/artlevitan/solos-examples
  */
 
 // Замените на ваши реальные данные

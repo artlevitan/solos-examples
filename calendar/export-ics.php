@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @see https://github.com/artlevitan/solos-examples
+ * 
  * Пример скрипта для выгрузки событий из CRM и генерации файла iCalendar (ICS).
  * 
  * Этот пример подключается к API CRM, извлекает данные о событиях и днях рождения,
@@ -10,7 +12,6 @@
  *
  * @see https://www.solos.pro/
  * @see https://www.solos.pro/api/v1/
- * @see https://github.com/artlevitan/solos-examples
  */
 
 // Замените на ваши реальные данные

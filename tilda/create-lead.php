@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @see https://github.com/artlevitan/solos-examples
+ * 
  * Пример интеграции формы обратной связи Tilda с системой solOS
  * 
  * Этот скрипт принимает данные, отправленные с формы Tilda через Webhook,
@@ -8,7 +10,6 @@
  *
  * @see https://www.solos.pro/
  * @see https://www.solos.pro/api/v1/
- * @see https://github.com/artlevitan/solos-examples
  * 
  * @see https://help-ru.tilda.cc/forms/webhook
  */

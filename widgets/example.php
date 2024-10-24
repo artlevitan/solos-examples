@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * @see https://github.com/artlevitan/solos-examples
+ * 
  * Пример виджета-фрейма для solOS.
  * 
  * Этот скрипт представляет собой базовый пример виджета-фрейма,
@@ -9,7 +11,6 @@
  * 
  * @see https://www.solos.pro/
  * @see https://www.solos.pro/api/v1/
- * @see https://github.com/artlevitan/solos-examples
  */
 
 // Получение адреса CRM-системы через параметр URL, если не задан — пустая строка
