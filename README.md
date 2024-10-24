@@ -1,4 +1,4 @@
-# solOS [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# solOS – Операционная Система для вашего бизнеса [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <img src="promo.jpg" alt="solOS" style="max-width:100%">
 
