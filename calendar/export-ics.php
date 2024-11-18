@@ -83,52 +83,65 @@ $calendarData = getEvents('calendar', 500, 0);
 $birthdaysData = getEvents('contacts/birthdays', 500, 0, 'asc');
 
 // Инициализация строки iCalendar
-$ical = 'BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//SOLOS//EN
-CALSCALE:GREGORIAN' . "\n";
+$ical = "BEGIN:VCALENDAR\r\n";
+$ical .= "VERSION:2.0\r\n";
+$ical .= "PRODID:-//SOLOS//RU\r\n";
+$ical .= "CALSCALE:GREGORIAN\r\n";
 
-// Формирование событий календаря для iCalendar
+$timezone = addslashes(date_default_timezone_get());
+
 foreach ($calendarData as $event) {
-    $description = str_replace(["\r", "\n", "\t"], '\n', $event['description']);
+    $eventTitle = $event['category'] . ' – ' . $event['name'];
+    $eventTitle = str_replace(["\\", ",", ";", "\r", "\n"], ["\\\\", "\\,", "\\;", '', '\\n'], $eventTitle);
+    $description = !empty($event['description']) ? str_replace(["\\", ",", ";", "\r", "\n"], ["\\\\", "\\,", "\\;", '', '\\n'], $event['description']) : '';
+    $uID = sha1(CRM_URL . '_calendar_' . $event['id']);
     $allDay = $event['all_day'] == '1';
 
-    $ical .= 'BEGIN:VEVENT
-TZID:' . date_default_timezone_get() . "\n";
+    $ical .= "BEGIN:VEVENT\r\n";
+    $ical .= "UID:" . $uID . "\r\n";
+    $ical .= "CREATED:" . date('Ymd\THis', time()) . "\r\n";
+    $ical .= "LAST-MODIFIED:" . date('Ymd\THis', time()) . "\r\n";
+    $ical .= "DTSTAMP:" . date('Ymd\THis', time()) . "\r\n";
 
     if ($allDay) {
-        $ical .= 'DTEND;VALUE=DATE:' . date('Ymd', strtotime($event['end'])) . "\n";
-        $ical .= 'DTSTART;VALUE=DATE:' . date('Ymd', strtotime($event['start'])) . "\n";
+        $ical .= "DTSTART;VALUE=DATE:" . date('Ymd', strtotime($event['start'])) . "\r\n";
+        $ical .= "DTEND;VALUE=DATE:" . date('Ymd', strtotime($event['end'])) . "\r\n";
     } else {
-        $ical .= 'DTEND:' . date('Ymd\THis', strtotime($event['end'])) . "\n";
-        $ical .= 'DTSTART:' . date('Ymd\THis', strtotime($event['start'])) . "\n";
+        $ical .= "DTSTART;TZID=" . $timezone . ":" . date('Ymd\THis', strtotime($event['start'])) . "\r\n";
+        $ical .= "DTEND;TZID=" . $timezone . ":" . date('Ymd\THis', strtotime($event['end'])) . "\r\n";
     }
 
-    $ical .= 'LAST-MODIFIED:' . date('Ymd\THis', time()) . "\n";
-    $ical .= 'DTSTAMP:' . date('Ymd\THis', time()) . "\n";
-    $ical .= 'SUMMARY:' . addslashes($event['category']) . ' – ' . addslashes($event['name']) . "\n";
-    $ical .= 'DESCRIPTION:' . $description . "\n";
-    $ical .= 'UID:' . sha1(CRM_URL . '_' . $event['id']) . "\n";
-    $ical .= 'CREATED:' . date('Ymd\THis', time()) . "\n";
-    $ical .= 'END:VEVENT' . "\n";
+    $ical .= "SUMMARY:" . $eventTitle . "\r\n";
+    $ical .= "DESCRIPTION:" . $description . "\r\n";
+
+    if (!$allDay) {
+        $ical .= "BEGIN:VALARM\r\n";
+        $ical .= "TRIGGER:-PT15M\r\n";
+        $ical .= "ACTION:DISPLAY\r\n";
+        $ical .= "DESCRIPTION:" . $eventTitle . "\r\n";
+        $ical .= "END:VALARM\r\n";
+    }
+
+    $ical .= "END:VEVENT\r\n";
 }
 
-// Формирование данных о днях рождения для iCalendar
 foreach ($birthdaysData as $bdays) {
-    $ical .= 'BEGIN:VEVENT
-TZID:' . date_default_timezone_get() . "\n";
-    $ical .= 'DTEND;VALUE=DATE:' . date('Y') . date('md', strtotime($bdays['bday'])) . "\n";
-    $ical .= 'DTSTART;VALUE=DATE:' . date('Y') . date('md', strtotime($bdays['bday'])) . "\n";
-    $ical .= 'LAST-MODIFIED:' . date('Ymd\THis', time()) . "\n";
-    $ical .= 'DTSTAMP:' . date('Ymd\THis', time()) . "\n";
-    $ical .= 'SUMMARY:Д. р. – ' . addslashes($bdays['name']) . "\n";
-    $ical .= 'DESCRIPTION:' . addslashes($bdays['client']) . "\n";
-    $ical .= 'UID:' . sha1(CRM_URL . '_bday_' . $bdays['id']) . "\n";
-    $ical .= 'END:VEVENT' . "\n";
+    $eventTitle = 'Д. р. – ' . addslashes($bdays['name']);
+    $uID = sha1(CRM_URL . '_bday_' . $bdays['id']);
+
+    $ical .= "BEGIN:VEVENT\r\n";
+    $ical .= "UID:" . $uID . "\r\n";
+    $ical .= "CREATED:" . date('Ymd\THis', time()) . "\r\n";
+    $ical .= "LAST-MODIFIED:" . date('Ymd\THis', time()) . "\r\n";
+    $ical .= "DTSTAMP:" . date('Ymd\THis', time()) . "\r\n";
+    $ical .= "DTSTART;VALUE=DATE:" . date('Y') . date('md', strtotime($bdays['bday'])) . "\r\n";
+    $ical .= "DTEND;VALUE=DATE:" . date('Y') . date('md', strtotime($bdays['bday'])) . "\r\n";
+    $ical .= "SUMMARY:" . $eventTitle . "\r\n";
+    $ical .= "DESCRIPTION:" . addslashes($bdays['client']) . "\r\n";
+    $ical .= "END:VEVENT\r\n";
 }
 
-// Завершение строки iCalendar
-$ical .= 'END:VCALENDAR';
+$ical .= "END:VCALENDAR\r\n";
 
 // Отправляем файл iCalendar на скачивание
 header('Content-Description: File Transfer');
