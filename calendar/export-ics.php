@@ -49,9 +49,10 @@ function getEvents(string $module, int $count, int $offset, string $order = ''):
     curl_setopt($ch, CURLOPT_URL, CRM_URL . '/api/get/');
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type:application/json',
-        'X-Crypto-Token:' . CRM_TOKEN,
-        'X-Crypto-Secret:' . CRM_SECRET,
+        'Content-Type: application/json',
+        'X-Crypto-Token: ' . CRM_TOKEN,
+        'X-Crypto-Secret: ' . CRM_SECRET,
+        'User-Agent: solOS/1.0',
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request_body));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

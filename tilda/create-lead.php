@@ -103,9 +103,10 @@ function createLead(string $name, string $email, string $phone, string $comment,
     curl_setopt($ch, CURLOPT_URL, CRM_URL . '/api/post/');
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type:application/json',
-        'X-Crypto-Token:' . CRM_TOKEN,
-        'X-Crypto-Secret:' . CRM_SECRET,
+        'Content-Type: application/json',
+        'X-Crypto-Token: ' . CRM_TOKEN,
+        'X-Crypto-Secret: ' . CRM_SECRET,
+        'User-Agent: solOS/1.0',
     ]);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
